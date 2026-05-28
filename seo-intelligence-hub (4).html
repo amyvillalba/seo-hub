@@ -1,0 +1,2670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEO Intelligence Hub</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Syne:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #f5f2ec;
+  --bg2: #ede9e1;
+  --surface: #ffffff;
+  --surface2: #faf8f4;
+  --border: #ddd8cf;
+  --border2: #ccc6bb;
+  --text: #1a1814;
+  --text2: #4a4640;
+  --muted: #8a8278;
+  --accent: #2d4a3e;
+  --accent2: #c8622a;
+  --accent3: #4a6fa5;
+  --green: #2d6a4f;
+  --red: #b5340a;
+  --yellow: #8a6200;
+  --green-bg: #eaf4ee;
+  --red-bg: #fdf0eb;
+  --yellow-bg: #fdf6e3;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ---- LAYOUT ---- */
+.app-shell { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: var(--accent);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 100;
+  overflow-y: auto;
+}
+
+.sidebar-logo {
+  padding: 28px 20px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar-logo h1 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 18px;
+  color: #fff;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.sidebar-logo span {
+  font-size: 10px;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.sidebar-section {
+  padding: 16px 20px 8px;
+}
+
+.sidebar-section-label {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 8px;
+}
+
+.client-list { display: flex; flex-direction: column; gap: 2px; }
+
+.client-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.client-item:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.client-item.active { background: rgba(255,255,255,0.15); color: #fff; }
+
+.client-avatar {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.add-client-btn {
+  margin: 8px 20px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.08);
+  border: 1px dashed rgba(255,255,255,0.2);
+  border-radius: 6px;
+  color: rgba(255,255,255,0.5);
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  cursor: pointer;
+  width: calc(100% - 40px);
+  text-align: left;
+  transition: all 0.15s;
+  letter-spacing: 0.03em;
+}
+
+.add-client-btn:hover {
+  background: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.8);
+  border-color: rgba(255,255,255,0.35);
+}
+
+.sidebar-nav {
+  padding: 16px 20px 8px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  margin-top: auto;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: rgba(255,255,255,0.5);
+  font-size: 11px;
+  transition: all 0.15s;
+  margin-bottom: 2px;
+}
+
+.nav-item:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); }
+.nav-item.active { background: rgba(255,255,255,0.12); color: #fff; }
+.nav-icon { font-size: 14px; }
+
+/* ---- MAIN ---- */
+.main {
+  margin-left: 240px;
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.topbar-left h2 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--text);
+}
+
+.topbar-left .client-url {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+.topbar-actions { display: flex; gap: 8px; }
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: none;
+  text-transform: uppercase;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover { background: #1e3329; }
+
+.btn-secondary {
+  background: var(--bg2);
+  color: var(--text2);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover { background: var(--border); }
+
+.btn-danger {
+  background: var(--red-bg);
+  color: var(--red);
+  border: 1px solid #f0c4b4;
+}
+.btn-danger:hover { background: #fce0d5; }
+
+.content { padding: 32px; flex: 1; }
+
+/* ---- TABS ---- */
+.tab-bar {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 28px;
+}
+
+.tab {
+  padding: 10px 18px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tab:hover { color: var(--text2); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.tab-badge {
+  background: var(--accent2);
+  color: #fff;
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+/* ---- PANELS ---- */
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* ---- UPLOAD CARDS ---- */
+.upload-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.upload-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+
+.upload-card:hover { border-color: var(--border2); }
+
+.upload-card-header {
+  padding: 16px 20px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.upload-card-icon {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.icon-ga4 { background: #fce8e6; }
+.icon-gsc { background: #e8f0fe; }
+.icon-kw { background: #e6f4ea; }
+.icon-comp { background: #fef7e0; }
+
+.upload-card-meta h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.upload-card-meta p {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.upload-card-status {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.status-empty { background: var(--bg2); color: var(--muted); }
+.status-loaded { background: var(--green-bg); color: var(--green); }
+.status-error { background: var(--red-bg); color: var(--red); }
+
+.upload-drop {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.upload-drop:hover { background: var(--bg2); }
+.upload-drop.dragover { background: #e8f4ee; border-color: var(--green); }
+
+.upload-drop-text {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.upload-drop-text strong {
+  color: var(--accent3);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.upload-loaded-info {
+  padding: 14px 20px;
+  background: var(--green-bg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.upload-loaded-info span { font-size: 11px; color: var(--green); font-weight: 500; }
+
+.clear-file-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px;
+  line-height: 1;
+  transition: color 0.15s;
+}
+.clear-file-btn:hover { color: var(--red); }
+
+/* ---- HOW TO EXPORT ---- */
+.export-guide {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.export-guide h3 {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.export-steps {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.export-step {
+  background: var(--bg2);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.export-step h4 {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+.export-step ol {
+  padding-left: 14px;
+  color: var(--text2);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+/* ---- ANALYZE BUTTON ---- */
+.analyze-bar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.analyze-bar-text h3 { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.analyze-bar-text p { font-size: 11px; color: var(--muted); }
+
+.analyze-btn {
+  padding: 12px 28px;
+  background: var(--accent2);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.analyze-btn:hover { background: #a34f1e; transform: translateY(-1px); }
+.analyze-btn:disabled { background: var(--muted); cursor: not-allowed; transform: none; }
+
+/* ---- RESULTS ---- */
+.results-section { margin-top: 32px; }
+
+.results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--border);
+}
+
+.results-header h2 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.results-header .period-tag {
+  font-size: 11px;
+  color: var(--muted);
+  background: var(--bg2);
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.stat-tile {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.stat-tile .st-label {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.stat-tile .st-val {
+  font-family: 'Instrument Serif', serif;
+  font-size: 32px;
+  line-height: 1;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.stat-tile .st-sub { font-size: 10px; color: var(--muted); }
+
+.signal-pill {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+
+.pill-good { background: var(--green-bg); color: var(--green); }
+.pill-warn { background: var(--yellow-bg); color: var(--yellow); }
+.pill-bad  { background: var(--red-bg); color: var(--red); }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 16px 20px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-header h3 {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.03em;
+}
+
+.card-body { padding: 16px 20px; }
+
+.bar-row {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 9px;
+}
+.bar-label { width: 130px; flex-shrink: 0; font-size: 11px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-track { flex: 1; height: 5px; background: var(--bg2); border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; transition: width 0.7s cubic-bezier(0.16,1,0.3,1); }
+.bar-fill-accent { background: var(--accent); }
+.bar-fill-blue { background: var(--accent3); }
+.bar-fill-orange { background: var(--accent2); }
+.bar-num { width: 38px; text-align: right; color: var(--muted); font-size: 11px; flex-shrink: 0; }
+
+/* ---- ACTION CHECKLIST ---- */
+.action-list { display: flex; flex-direction: column; gap: 8px; }
+
+.action-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.action-item:hover { border-color: var(--border2); }
+.action-item.done { opacity: 0.5; }
+.action-item.done .action-text { text-decoration: line-through; color: var(--muted); }
+
+.action-checkbox {
+  width: 18px; height: 18px;
+  border: 2px solid var(--border2);
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  color: #fff;
+  font-size: 11px;
+}
+
+.action-item.done .action-checkbox {
+  background: var(--green);
+  border-color: var(--green);
+}
+
+.action-priority {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.p-high { background: var(--red-bg); color: var(--red); }
+.p-med  { background: var(--yellow-bg); color: var(--yellow); }
+.p-low  { background: var(--green-bg); color: var(--green); }
+
+.action-content { flex: 1; }
+.action-text { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 3px; line-height: 1.4; }
+.action-detail { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+/* ---- BLOG BRIEFS ---- */
+.brief-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.brief-header {
+  padding: 18px 22px;
+  background: var(--accent);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.brief-header h3 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: #fff;
+  line-height: 1.3;
+}
+
+.brief-badge {
+  background: rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.8);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.brief-body { padding: 20px 22px; }
+
+.brief-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.brief-tag {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+}
+
+.brief-section { margin-bottom: 16px; }
+
+.brief-section-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 7px;
+}
+
+.brief-section p {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.7;
+}
+
+.brief-section ul {
+  padding-left: 16px;
+  color: var(--text2);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+/* ---- EMPTY STATE ---- */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+}
+
+.empty-state .es-icon { font-size: 40px; margin-bottom: 16px; opacity: 0.4; }
+.empty-state h3 { font-size: 16px; font-weight: 600; color: var(--text2); margin-bottom: 8px; }
+.empty-state p { font-size: 12px; max-width: 320px; margin: 0 auto; line-height: 1.6; }
+
+/* ---- MODALS ---- */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--surface);
+  border-radius: 12px;
+  width: 460px;
+  max-width: 90vw;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 22px 24px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.modal-close {
+  background: none; border: none;
+  color: var(--muted); font-size: 20px;
+  cursor: pointer; line-height: 1; padding: 2px;
+}
+
+.modal-close:hover { color: var(--text); }
+.modal-body { padding: 24px; }
+
+.form-group { margin-bottom: 18px; }
+
+.form-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text2);
+  margin-bottom: 7px;
+}
+
+.form-input, .form-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  transition: border-color 0.15s;
+  outline: none;
+}
+
+.form-input:focus, .form-textarea:focus {
+  border-color: var(--accent);
+  background: #fff;
+}
+
+.form-textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+.modal-footer { padding: 0 24px 24px; display: flex; gap: 8px; justify-content: flex-end; }
+
+/* ---- LOADING ---- */
+.loading-spinner {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.ai-loading {
+  color: var(--muted);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 0;
+}
+
+.ai-loading-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.ai-loading-dot:nth-child(2) { animation-delay: 0.2s; }
+.ai-loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+/* ---- NO CLIENT ---- */
+.no-client-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.no-client-screen .ncs-icon { font-size: 48px; margin-bottom: 20px; }
+.no-client-screen h2 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.no-client-screen p { font-size: 13px; color: var(--muted); max-width: 340px; line-height: 1.7; margin-bottom: 24px; }
+
+/* ---- KEYWORD TABLE ---- */
+.kw-table { width: 100%; border-collapse: collapse; }
+.kw-table th { text-align: left; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding: 0 0 10px; border-bottom: 1px solid var(--border); font-weight: 600; }
+.kw-table td { padding: 8px 0; border-bottom: 1px solid rgba(200,195,185,0.4); font-size: 11px; vertical-align: middle; }
+.kw-table tr:last-child td { border-bottom: none; }
+.kw-table td:not(:first-child) { text-align: right; color: var(--muted); }
+.kw-query { color: var(--text); font-weight: 500; max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+
+/* ---- PRINT / COPY ---- */
+.copy-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 5px 12px;
+  border-radius: 5px;
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+
+/* ---- PLATFORM BUTTONS ---- */
+.platform-btn {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--bg2);
+  color: var(--text2);
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.03em;
+}
+.platform-btn:hover { border-color: var(--accent3); color: var(--accent3); }
+.platform-btn.active { background: var(--accent3); border-color: var(--accent3); color: #fff; }
+
+/* ---- META OUTPUT ---- */
+.meta-row {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 20px;
+  margin-bottom: 12px;
+  position: relative;
+}
+.meta-row-page {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.meta-field { margin-bottom: 12px; }
+.meta-field-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+.meta-field-value {
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.5;
+  background: var(--bg2);
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  cursor: text;
+  user-select: all;
+}
+.meta-field-count {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+.meta-field-count.over { color: var(--red); font-weight: 600; }
+.meta-copy-row { display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px; }
+
+/* ---- CAPTION OUTPUT ---- */
+.caption-variant {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.caption-variant-header {
+  padding: 12px 16px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.caption-variant-header span {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.caption-text {
+  padding: 16px;
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--text);
+  white-space: pre-wrap;
+  cursor: text;
+  user-select: all;
+}
+.caption-history-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+.caption-history-meta {
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 8px;
+  letter-spacing: 0.04em;
+}
+@media (max-width: 900px) {
+  .sidebar { width: 200px; }
+  .main { margin-left: 200px; }
+  .stats-row { grid-template-columns: repeat(3, 1fr); }
+  .upload-grid, .two-col, .three-col { grid-template-columns: 1fr; }
+  .export-steps { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <h1>SEO Intelligence<br>Hub</h1>
+      <span>Multi-Client Analytics</span>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Clients</div>
+      <div class="client-list" id="client-list"></div>
+    </div>
+
+    <button class="add-client-btn" onclick="openAddClient()">+ Add New Client</button>
+
+    <div class="sidebar-nav">
+      <div class="sidebar-section-label">Navigate</div>
+      <div class="nav-item active" data-nav="data" onclick="switchNav(this)">
+        <span class="nav-icon">📤</span> Upload Data
+      </div>
+      <div class="nav-item" data-nav="results" onclick="switchNav(this)">
+        <span class="nav-icon">📊</span> Analytics
+      </div>
+      <div class="nav-item" data-nav="actions" onclick="switchNav(this)">
+        <span class="nav-icon">✅</span> Action List
+      </div>
+      <div class="nav-item" data-nav="briefs" onclick="switchNav(this)">
+        <span class="nav-icon">✍️</span> Blog Briefs
+      </div>
+      <div class="nav-item" data-nav="meta" onclick="switchNav(this)">
+        <span class="nav-icon">🏷️</span> Meta Rewrites
+      </div>
+      <div class="nav-item" data-nav="captions" onclick="switchNav(this)">
+        <span class="nav-icon">📱</span> Captions
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main" id="main-content">
+    <!-- No client selected -->
+    <div class="no-client-screen" id="no-client-screen">
+      <div class="ncs-icon">📋</div>
+      <h2>No client selected</h2>
+      <p>Add your first client to get started. You can manage multiple clients and switch between them anytime.</p>
+      <button class="btn btn-primary" onclick="openAddClient()">Add Your First Client</button>
+    </div>
+
+    <!-- Client workspace (hidden until client selected) -->
+    <div id="client-workspace" style="display:none; display:flex; flex-direction:column; min-height:100vh;">
+
+      <div class="topbar">
+        <div class="topbar-left">
+          <h2 id="ws-client-name">Client Name</h2>
+          <div class="client-url" id="ws-client-url"></div>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-secondary" onclick="openEditClient()">Edit Client</button>
+          <button class="btn btn-danger" onclick="deleteCurrentClient()">Remove</button>
+        </div>
+      </div>
+
+      <div class="content">
+        <!-- DATA PANEL -->
+        <div class="panel active" id="panel-data">
+          <div class="tab-bar">
+            <div class="tab active" onclick="switchTab(this,'data')">Upload Data</div>
+          </div>
+
+          <div class="export-guide">
+            <h3>📌 How to export each report</h3>
+            <div class="export-steps">
+              <div class="export-step">
+                <h4>GA4 Reports Snapshot</h4>
+                <ol>
+                  <li>GA4 → Reports → Overview</li>
+                  <li>Set date range (last 90 days)</li>
+                  <li>Click download icon → CSV</li>
+                </ol>
+              </div>
+              <div class="export-step">
+                <h4>GSC Search Queries</h4>
+                <ol>
+                  <li>Search Console → Performance</li>
+                  <li>Set date range → Export → CSV</li>
+                  <li>Includes queries, clicks, impressions, CTR, position</li>
+                </ol>
+              </div>
+              <div class="export-step">
+                <h4>GSC Pages Report</h4>
+                <ol>
+                  <li>Search Console → Performance</li>
+                  <li>Click "Pages" tab → Export → CSV</li>
+                </ol>
+              </div>
+              <div class="export-step">
+                <h4>Keyword Research (Ubersuggest / SEMrush / Ahrefs)</h4>
+                <ol>
+                  <li>Run keyword analysis for client domain</li>
+                  <li>Export as CSV (any format works)</li>
+                  <li>Include: keyword, volume, difficulty, position</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          <div class="upload-grid">
+            <!-- GA4 -->
+            <div class="upload-card" id="card-ga4">
+              <div class="upload-card-header">
+                <div style="display:flex;align-items:center;gap:12px;flex:1">
+                  <div class="upload-card-icon icon-ga4">📊</div>
+                  <div class="upload-card-meta">
+                    <h3>GA4 Reports Snapshot</h3>
+                    <p>Traffic, users, channels, page views, engagement, conversions</p>
+                  </div>
+                </div>
+                <div class="upload-card-status status-empty" id="status-ga4">Empty</div>
+              </div>
+              <div class="upload-drop" id="drop-ga4"
+                onclick="document.getElementById('file-ga4').click()"
+                ondragover="handleDragOver(event,'drop-ga4')"
+                ondragleave="handleDragLeave('drop-ga4')"
+                ondrop="handleDrop(event,'ga4')">
+                <div style="font-size:24px;opacity:0.35">📂</div>
+                <div class="upload-drop-text">Drop CSV here or <strong>browse</strong></div>
+              </div>
+              <div class="upload-loaded-info" id="loaded-ga4" style="display:none">
+                <span id="loaded-ga4-name">file.csv loaded</span>
+                <button class="clear-file-btn" onclick="clearFile('ga4')">✕</button>
+              </div>
+              <input type="file" id="file-ga4" accept=".csv" multiple style="display:none" onchange="handleFileInput(event,'ga4')">
+            </div>
+
+            <!-- GSC Queries -->
+            <div class="upload-card" id="card-gsc-queries">
+              <div class="upload-card-header">
+                <div style="display:flex;align-items:center;gap:12px;flex:1">
+                  <div class="upload-card-icon icon-gsc">🔍</div>
+                  <div class="upload-card-meta">
+                    <h3>GSC Search Queries</h3>
+                    <p>Keywords driving impressions + clicks, CTR, average position</p>
+                  </div>
+                </div>
+                <div class="upload-card-status status-empty" id="status-gsc-queries">Empty</div>
+              </div>
+              <div class="upload-drop" id="drop-gsc-queries"
+                onclick="document.getElementById('file-gsc-queries').click()"
+                ondragover="handleDragOver(event,'drop-gsc-queries')"
+                ondragleave="handleDragLeave('drop-gsc-queries')"
+                ondrop="handleDrop(event,'gsc-queries')">
+                <div style="font-size:24px;opacity:0.35">📂</div>
+                <div class="upload-drop-text">Drop CSV here or <strong>browse</strong></div>
+              </div>
+              <div class="upload-loaded-info" id="loaded-gsc-queries" style="display:none">
+                <span id="loaded-gsc-queries-name">file.csv loaded</span>
+                <button class="clear-file-btn" onclick="clearFile('gsc-queries')">✕</button>
+              </div>
+              <input type="file" id="file-gsc-queries" accept=".csv" multiple style="display:none" onchange="handleFileInput(event,'gsc-queries')">
+            </div>
+
+            <!-- GSC Pages -->
+            <div class="upload-card" id="card-gsc-pages">
+              <div class="upload-card-header">
+                <div style="display:flex;align-items:center;gap:12px;flex:1">
+                  <div class="upload-card-icon icon-gsc">📄</div>
+                  <div class="upload-card-meta">
+                    <h3>GSC Pages Report</h3>
+                    <p>Which pages get impressions vs clicks — CTR gaps by page</p>
+                  </div>
+                </div>
+                <div class="upload-card-status status-empty" id="status-gsc-pages">Empty</div>
+              </div>
+              <div class="upload-drop" id="drop-gsc-pages"
+                onclick="document.getElementById('file-gsc-pages').click()"
+                ondragover="handleDragOver(event,'drop-gsc-pages')"
+                ondragleave="handleDragLeave('drop-gsc-pages')"
+                ondrop="handleDrop(event,'gsc-pages')">
+                <div style="font-size:24px;opacity:0.35">📂</div>
+                <div class="upload-drop-text">Drop CSV here or <strong>browse</strong></div>
+              </div>
+              <div class="upload-loaded-info" id="loaded-gsc-pages" style="display:none">
+                <span id="loaded-gsc-pages-name">file.csv loaded</span>
+                <button class="clear-file-btn" onclick="clearFile('gsc-pages')">✕</button>
+              </div>
+              <input type="file" id="file-gsc-pages" accept=".csv" multiple style="display:none" onchange="handleFileInput(event,'gsc-pages')">
+            </div>
+
+            <!-- Keywords -->
+            <div class="upload-card" id="card-keywords">
+              <div class="upload-card-header">
+                <div style="display:flex;align-items:center;gap:12px;flex:1">
+                  <div class="upload-card-icon icon-kw">🎯</div>
+                  <div class="upload-card-meta">
+                    <h3>Keyword Research</h3>
+                    <p>Ubersuggest, SEMrush, Ahrefs, or any keyword export CSV</p>
+                  </div>
+                </div>
+                <div class="upload-card-status status-empty" id="status-keywords">Empty</div>
+              </div>
+              <div class="upload-drop" id="drop-keywords"
+                onclick="document.getElementById('file-keywords').click()"
+                ondragover="handleDragOver(event,'drop-keywords')"
+                ondragleave="handleDragLeave('drop-keywords')"
+                ondrop="handleDrop(event,'keywords')">
+                <div style="font-size:24px;opacity:0.35">📂</div>
+                <div class="upload-drop-text">Drop CSV here or <strong>browse</strong></div>
+              </div>
+              <div class="upload-loaded-info" id="loaded-keywords" style="display:none">
+                <span id="loaded-keywords-name">file.csv loaded</span>
+                <button class="clear-file-btn" onclick="clearFile('keywords')">✕</button>
+              </div>
+              <input type="file" id="file-keywords" accept=".csv" multiple style="display:none" onchange="handleFileInput(event,'keywords')">
+            </div>
+
+            <!-- Competitor -->
+            <div class="upload-card" id="card-competitor">
+              <div class="upload-card-header">
+                <div style="display:flex;align-items:center;gap:12px;flex:1">
+                  <div class="upload-card-icon icon-comp">🏁</div>
+                  <div class="upload-card-meta">
+                    <h3>Competitor Analysis</h3>
+                    <p>Competitor keyword gaps or ranking comparison export (optional)</p>
+                  </div>
+                </div>
+                <div class="upload-card-status status-empty" id="status-competitor">Empty</div>
+              </div>
+              <div class="upload-drop" id="drop-competitor"
+                onclick="document.getElementById('file-competitor').click()"
+                ondragover="handleDragOver(event,'drop-competitor')"
+                ondragleave="handleDragLeave('drop-competitor')"
+                ondrop="handleDrop(event,'competitor')">
+                <div style="font-size:24px;opacity:0.35">📂</div>
+                <div class="upload-drop-text">Drop CSV here or <strong>browse</strong></div>
+              </div>
+              <div class="upload-loaded-info" id="loaded-competitor" style="display:none">
+                <span id="loaded-competitor-name">file.csv loaded</span>
+                <button class="clear-file-btn" onclick="clearFile('competitor')">✕</button>
+              </div>
+              <input type="file" id="file-competitor" accept=".csv" multiple style="display:none" onchange="handleFileInput(event,'competitor')">
+            </div>
+
+            <!-- Blog Audit -->
+            <div class="upload-card" id="card-blog">
+              <div class="upload-card-header">
+                <div style="display:flex;align-items:center;gap:12px;flex:1">
+                  <div class="upload-card-icon icon-comp">📝</div>
+                  <div class="upload-card-meta">
+                    <h3>Blog / Content Audit</h3>
+                    <p>Existing posts list with URLs, titles, traffic (paste as CSV or export from Screaming Frog)</p>
+                  </div>
+                </div>
+                <div class="upload-card-status status-empty" id="status-blog">Empty</div>
+              </div>
+              <div class="upload-drop" id="drop-blog"
+                onclick="document.getElementById('file-blog').click()"
+                ondragover="handleDragOver(event,'drop-blog')"
+                ondragleave="handleDragLeave('drop-blog')"
+                ondrop="handleDrop(event,'blog')">
+                <div style="font-size:24px;opacity:0.35">📂</div>
+                <div class="upload-drop-text">Drop CSV here or <strong>browse</strong></div>
+              </div>
+              <div class="upload-loaded-info" id="loaded-blog" style="display:none">
+                <span id="loaded-blog-name">file.csv loaded</span>
+                <button class="clear-file-btn" onclick="clearFile('blog')">✕</button>
+              </div>
+              <input type="file" id="file-blog" accept=".csv" multiple style="display:none" onchange="handleFileInput(event,'blog')">
+            </div>
+          </div>
+
+          <div class="analyze-bar">
+            <div class="analyze-bar-text">
+              <h3>Ready to analyze</h3>
+              <p>Upload at least one file to run your monthly report. More data = sharper recommendations.</p>
+            </div>
+            <button class="analyze-btn" id="analyze-btn" onclick="runAnalysis()">
+              Run Analysis →
+            </button>
+          </div>
+        </div>
+
+        <!-- RESULTS PANEL -->
+        <div class="panel" id="panel-results">
+          <div id="results-content">
+            <div class="empty-state">
+              <div class="es-icon">📊</div>
+              <h3>No analysis yet</h3>
+              <p>Upload your data files and click "Run Analysis" to see your dashboard.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTIONS PANEL -->
+        <div class="panel" id="panel-actions">
+          <div id="actions-content">
+            <div class="empty-state">
+              <div class="es-icon">✅</div>
+              <h3>No action list yet</h3>
+              <p>Run your analysis first and your monthly SEO + copy action checklist will appear here.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- BRIEFS PANEL -->
+        <div class="panel" id="panel-briefs">
+          <div id="briefs-content">
+            <div class="empty-state">
+              <div class="es-icon">✍️</div>
+              <h3>No blog briefs yet</h3>
+              <p>Run your analysis first and blog post briefs based on your actual search data will appear here.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- META REWRITES PANEL -->
+        <div class="panel" id="panel-meta">
+          <div id="meta-content">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--border)">
+              <div>
+                <h2 style="font-family:'Instrument Serif',serif;font-size:24px;font-weight:400">Meta Description Rewriter</h2>
+                <p style="font-size:11px;color:var(--muted);margin-top:4px">Paste your pages below — get title tags and meta descriptions back in this client's voice, ready to paste into Wix.</p>
+              </div>
+            </div>
+            <div class="card" style="margin-bottom:20px">
+              <div class="card-header"><h3>Pages to Rewrite</h3></div>
+              <div class="card-body">
+                <div class="form-group" style="margin-bottom:14px">
+                  <label class="form-label">Page names — one per line</label>
+                  <textarea class="form-textarea" id="meta-pages-input" style="min-height:140px;font-size:12px" placeholder="Home&#10;Personal Coaching&#10;Business Coaching&#10;Speaking&#10;About Andres&#10;Contact&#10;FAQs&#10;The Mission"></textarea>
+                </div>
+                <div class="form-group" style="margin-bottom:14px">
+                  <label class="form-label">Focus keyword per page <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(optional — one per line, matching order above)</span></label>
+                  <textarea class="form-textarea" id="meta-keywords-input" style="min-height:90px;font-size:12px" placeholder="accountability coach Seattle&#10;personal coaching programs&#10;business coaching entrepreneurs&#10;keynote speaker leadership"></textarea>
+                </div>
+                <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                  <button class="analyze-btn" id="meta-generate-btn" onclick="generateMetaRewrites()" style="padding:10px 24px;font-size:11px">Generate Meta Rewrites →</button>
+                  <span style="font-size:11px;color:var(--muted)">Returns title tags (55-60 chars) + meta descriptions (140-155 chars) in client voice</span>
+                </div>
+              </div>
+            </div>
+            <div id="meta-output"></div>
+          </div>
+        </div>
+
+        <!-- CAPTIONS PANEL -->
+        <div class="panel" id="panel-captions">
+          <div id="captions-content">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--border)">
+              <div>
+                <h2 style="font-family:'Instrument Serif',serif;font-size:24px;font-weight:400">Social Caption Generator</h2>
+                <p style="font-size:11px;color:var(--muted);margin-top:4px">This client's voice rules and hard restrictions are already loaded. Describe the post or paste the Reel script.</p>
+              </div>
+            </div>
+            <div class="two-col" style="margin-bottom:20px">
+              <div class="card">
+                <div class="card-header"><h3>Post Input</h3></div>
+                <div class="card-body">
+                  <div class="form-group" style="margin-bottom:14px">
+                    <label class="form-label">Platform</label>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap" id="platform-btns">
+                      <button class="platform-btn active" data-platform="instagram-reel" onclick="selectPlatform(this)">Instagram Reel</button>
+                      <button class="platform-btn" data-platform="instagram-carousel" onclick="selectPlatform(this)">Instagram Carousel</button>
+                      <button class="platform-btn" data-platform="facebook" onclick="selectPlatform(this)">Facebook</button>
+                      <button class="platform-btn" data-platform="linkedin" onclick="selectPlatform(this)">LinkedIn</button>
+                    </div>
+                  </div>
+                  <div class="form-group" style="margin-bottom:14px">
+                    <label class="form-label">Content Type</label>
+                    <select class="form-input" id="caption-content-type" style="font-size:12px">
+                      <option value="reel-script">Reel — paste the full script below</option>
+                      <option value="reel-describe">Reel — describe what happens on camera</option>
+                      <option value="carousel">Carousel — describe the topic / slides</option>
+                      <option value="announcement">Announcement, promo or event</option>
+                      <option value="educational">Educational / tip post</option>
+                      <option value="couple-wedding">Couple / wedding / ceremony post</option>
+                      <option value="listing">Real estate listing</option>
+                      <option value="freeform">Other — I'll describe it</option>
+                    </select>
+                  </div>
+                  <div class="form-group" style="margin-bottom:14px">
+                    <label class="form-label">Script or Description</label>
+                    <textarea class="form-textarea" id="caption-input" style="min-height:160px;font-size:12px" placeholder="Paste the Reel script, or describe what the post is about — what was said on camera, the hook text, the key message, the vibe. The more specific you are, the better the caption."></textarea>
+                  </div>
+                  <div class="form-group" style="margin-bottom:14px">
+                    <label class="form-label">Specific angle or ask? <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
+                    <input class="form-input" id="caption-angle" placeholder="e.g. lean into the secrecy angle, push consultation CTA, keep it under 3 lines" style="font-size:12px">
+                  </div>
+                  <div style="display:flex;gap:10px;align-items:center">
+                    <button class="analyze-btn" id="caption-generate-btn" onclick="generateCaption()" style="padding:10px 24px;font-size:11px">Generate Captions →</button>
+                    <span style="font-size:11px;color:var(--muted)">Returns 2 variations to choose from</span>
+                  </div>
+                </div>
+              </div>
+              <div id="caption-output">
+                <div class="empty-state" style="padding:40px 20px">
+                  <div class="es-icon">📱</div>
+                  <h3>Captions appear here</h3>
+                  <p>Fill in the form and click Generate. You'll get 2 variations in this client's voice.</p>
+                </div>
+              </div>
+            </div>
+            <div id="caption-history-section" style="display:none">
+              <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">Session History</div>
+              <div id="caption-history"></div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /content -->
+    </div><!-- /client-workspace -->
+  </main>
+</div>
+
+<!-- BLOG DRAFT MODAL -->
+<div class="modal-overlay" id="draft-modal">
+  <div class="modal" style="width:720px;max-width:95vw">
+    <div class="modal-header">
+      <h3 id="draft-modal-title" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:18px">Generating Draft...</h3>
+      <button class="modal-close" onclick="closeDraftModal()">✕</button>
+    </div>
+    <div class="modal-body" style="max-height:72vh;overflow-y:auto;padding:24px">
+      <div id="draft-output">
+        <div style="display:flex;align-items:center;gap:10px;padding:20px 0;color:var(--muted)">
+          <div class="ai-loading-dot"></div><div class="ai-loading-dot"></div><div class="ai-loading-dot"></div>
+          <span style="font-size:12px">Writing first draft in client voice...</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer" style="justify-content:space-between;padding:0 24px 20px">
+      <span style="font-size:11px;color:var(--muted)" id="draft-word-count"></span>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-secondary" id="draft-copy-btn" onclick="copyDraft()" style="display:none">Copy Draft</button>
+        <button class="btn btn-secondary" onclick="closeDraftModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD/EDIT CLIENT MODAL -->
+<div class="modal-overlay" id="client-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Add New Client</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Client / Brand Name *</label>
+        <input class="form-input" id="field-name" placeholder="e.g. La Tribu, Acme Agency">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Website URL</label>
+        <input class="form-input" id="field-url" placeholder="e.g. latribucoach.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Industry / Niche</label>
+        <input class="form-input" id="field-niche" placeholder="e.g. Coaching & Leadership, E-commerce, SaaS">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Primary Goals & Notes</label>
+        <textarea class="form-textarea" id="field-notes" placeholder="e.g. Grow organic search, improve CTR on service pages, build thought leadership blog..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" id="modal-save-btn" onclick="saveClient()">Save Client</button>
+    </div>
+  </div>
+</div>
+
+<script type="application/json" id="client-data">
+[
+  {
+    "id": "c_latribu",
+    "name": "La Tribu",
+    "url": "latribucoach.com",
+    "niche": "Accountability, mindset & leadership coaching / keynote speaking / corporate training",
+    "notes": "GOALS: Grow organic search (currently ~3% of new users). Fix CTR on pages ranking position 1 but getting near-zero clicks. Build blog content around named-person posts and high-impression GSC queries. Drive free consultation bookings. Support Unpack It workshop registrations.\n\nFOUNDER: Andres Villalba. Pro basketball career across US/Mexico/Europe. Founded orphanage in Chihuahua, Chihuahua Mexico. Immigration and human rights advocacy. Government/community relations. Real estate brokerage. Keynote speaker. 30K Instagram, 21K Facebook following.\n\nVOICE: Direct, warm, earned. No coaching cliches. No AI-sounding language. No motivational filler. Named-person blog content (podcast companion posts) drives the most search traffic - prioritize it. Avoid: transform, unlock your potential, journey, game-changer, holistic.\n\nPLATFORM: Wix Core plan. DreamHost domain. Stripe Payment Links. Calendly + Stripe for 1:1 bookings. Zapier automations. GA4 + GSC connected. Ubersuggest + Adaptify.\n\nSEO PROBLEM: CTR not rankings. Site ranks position 1 for key terms but near-zero clicks. Fix title tags and meta descriptions first on every service page.\n\nACTIVE: Unpack It virtual workshop pilots June 6+13. 7-day SEO sprint. Full-day Backpack workshop in development (3 Boxes Method: Control/Influence/Release). LinkedIn 30-day plan built. Podcast pitching list ready.",
+    "created": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "c_inclusiveaesthetics",
+    "name": "Inclusive Aesthetics",
+    "url": "inclusiveaesthetics.biz",
+    "niche": "Medical aesthetics & women's health clinic / Normandy Park, South King County WA",
+    "notes": "GOALS: Grow local visibility in Normandy Park/South King County. Drive bookings via Prospyr. Fix non-branded search gap. Strengthen Women's Health page (ranking ~position 11). Fix homepage CTR - highest traffic page but near-zero booking clicks.\n\nFOUNDER: Grace Grymes Chapman, DNP. NEVER say board certified - DNP only. 20+ years clinical experience. Member of American Society for Laser Medicine and Surgery. Mission: safe aesthetics for all skin tones - built clinic to serve people of color underserved by aesthetic providers.\n\nSERVICES: Laser treatments, injectables, fillers, microneedling, DiamondGlow, hair restoration, sexual wellness, women's health exams, HRT, tattoo removal, skin rejuvenation, chemical peels. DO NOT mention medical weight support - removed.\n\nVOICE: Clinical confidence + warmth. Calm authority. No hype. Use: evidence-based, safety-first, natural-looking results, realistic expectations, all skin types and tones. Avoid: board certified, miracle results, transformative, trending, actually.\n\nPLATFORM: Wix (built by Amy). Prospyr for booking/CRM (HIPAA-compliant). GA4 + GSC connected. Canva.\n\nSEO ISSUES: Homepage title/meta need update. Lasers + Botox pages need title/meta rewrites. Duplicate URL audit needed. Non-branded search is primary gap.\n\nACTIVE: 30-day action plan rolling. Women's Health Preventative Screening Event June 13. Laser Education content series in development. Women's Hormonal Health blog series in development. Growth Light retainer $700/mo.",
+    "created": "2026-01-01T00:00:01.000Z"
+  },
+  {
+    "id": "c_jesthetics",
+    "name": "J Esthetics Skin Lounge",
+    "url": "TBD - confirm with Janeth",
+    "niche": "Medical spa / skincare / South King County WA (Tukwila)",
+    "notes": "GOALS: Increase local visibility in Tukwila/Kent/South King County. Drive appointment bookings via Aesthetic Record. Build trust through educational content on Instagram and email.\n\nFOUNDER: Janeth Elizalde Romero. Licensed esthetician. Warm, approachable, soft-spoken with slight accent. Carries Epionce and Environ skincare lines.\n\nVOICE: Warm, confident, approachable, professional. Educational without clinical coldness. Body-positive. Use: your skin, results you can see, medical-grade, personalized. Avoid: flawless, perfect, fix, anti-aging (use age-confident instead), guaranteed results, any shame-based language.\n\nSCRIPTS: Under 30 seconds, simple, conversational. Match Janeth's warm soft-spoken delivery.\n\nPLATFORM: Aesthetic Record for booking/CRM/email (Campaigns feature). Website TBD. Instagram is primary social channel.\n\nACTIVE: Mother's Day event complete (May 7, 2026). Ongoing seasonal promotions. Email marketing via AR Campaigns exploratory.\n\nNOTES: Website URL not yet confirmed. No confirmed SEO setup. Local search visibility for South King County is the biggest opportunity.",
+    "created": "2026-01-01T00:00:02.000Z"
+  },
+  {
+    "id": "c_freshlook",
+    "name": "Fresh Look Team / Fresh Look Commercial",
+    "url": "tonylopez.johnlscott.com",
+    "niche": "Residential + commercial real estate / South King County & Greater Seattle",
+    "notes": "GOALS: Establish Tony Lopez as the go-to wealth-building real estate advisor in South King County. Build consistent Instagram/YouTube content that educates and drives consultations without paid ads.\n\nFOUNDER: Antonio Tony Lopez. Managing Broker + South Regional Director, Seattle King County Realtors. Personal experience with flips, investments, commercial deals. Spanish-speaking. Pursuing CCIM designation. LIMITED CAMERA AVAILABILITY - biggest content bottleneck.\n\nTEAM: Caleigh Van Slambrook (primary on-camera residential), Andrea Cruz Gonzalez (Spanish-speaking/Federal Way), Natalya (commercial on-camera), Linus (residential on-camera).\n\nTWO VOICES: Residential = conversational, witty, strategy-forward, not salesy. Commercial = sharper, protective, fun/sarcastic helpful older sibling energy.\n\nHARD RULES - NON-NEGOTIABLE: No hashtags ever on any platform. Never use the word actually. No Oxford comma. Captions add context - never repeat what was said on camera. Hooks = 3-6 words on-screen. Never introduce unverified data. Stock photos from Pexels and Unsplash ONLY.\n\nPLATFORM: John L. Scott MyDesk + Engage. Canva (via MCP). freshlookcommercial.com redirects - nothing indexable.\n\nBIGGEST SEO OPPORTUNITY: Standalone commercial site - current redirect has nothing to index.\n\nACTIVE: May 2026 content calendar executing. Issaquah listing $1,699,950 reels in production. June 2026 calendar drafted. Standalone commercial site naming not finalized.",
+    "created": "2026-01-01T00:00:03.000Z"
+  },
+  {
+    "id": "c_shotgun",
+    "name": "Shotgun Ceremonies",
+    "url": "shotgunceremonies.com",
+    "niche": "Elopement chapel / wedding venue / officiant services / Georgetown Seattle",
+    "notes": "GOALS: Convert elopement-intent paid search to bookings. Fix /post/elope-in-seattle landing page (root cause of conversion failure). Dominate elope in Seattle + king county marriage license query cluster. Fix GBP interaction drop (290 to 50-60). Resolve www/non-www duplicate crawl in GSC.\n\nFOUNDER: Bronwen Stevenson. 15+ years operating. On-camera face of brand. Comfort and authenticity is a hard constraint - never propose content outside her natural style. Pink shipping container in Georgetown is the venue.\n\nVOICE: Dry, deadpan, irreverent, self-aware, never salesy. In-between positioning (not courthouse, not ballroom) is core. Secrecy/discretion is top-performing content topic - lean into it always.\n\nHARD RULES: No hashtags ever. No dollar sign or specific fee amounts in captions. No Oxford comma. No romantic or abstract hooks. Captions = NEVER restatement of script - complete rewrite, new angle. Hooks = 3-8 words, grounded, specific.\n\nOFFERINGS: Chapel/gazebo from $400 (officiant, witnesses, music, photos, paperwork). Elvis wedding, pub crawl wedding, off-site 0-25mi no travel fee, detention facility ceremonies.\n\nPLATFORM: Wix + Wix Bookings. GA4 via GTM (G-ZDXJ68Z28X). GSC connected. Google Ads + Microsoft Ads. Meta retargeting. Canva brand kit kAGn6muhcso. MacWhisper for transcription.\n\nACTIVE: Fix elopement landing page. Microsoft Ads conversion tracking setup. VIP Cabin Great Wheel reel in production. GBP investigation. Immigration attorney outreach campaign ready. www/non-www canonical fix pending.",
+    "created": "2026-01-01T00:00:04.000Z"
+  }
+]
+</script>
+<script>
+// ============================================================
+// DEFAULT CLIENTS
+// ============================================================
+const DEFAULT_CLIENTS = JSON.parse(document.getElementById('client-data').textContent);
+
+
+// ============================================================
+// STATE
+// ============================================================
+// Clients are always sourced from DEFAULT_CLIENTS -- no localStorage dependency.
+// User-added clients are merged on top from sessionStorage so they persist
+// within a browser session but never block the defaults from loading.
+let clients = [...DEFAULT_CLIENTS];
+let currentClientId = DEFAULT_CLIENTS[0].id;
+let editingClientId = null;
+let fileData = {}; // { ga4: '...csv...', 'gsc-queries': '...', etc. }
+let fileNames = {}; // { ga4: ['file1.csv', 'file2.csv'], etc. }
+let analysisResults = {}; // per client
+let checkedActions = {}; // per client
+
+// ============================================================
+// CLIENT MANAGEMENT
+// ============================================================
+function saveClients() {
+  // Clients are defined in code -- nothing to persist for defaults.
+  // User-added clients (non-default ids) are kept in memory only.
+}
+
+function renderClientList() {
+  const el = document.getElementById('client-list');
+  if (!clients.length) {
+    el.innerHTML = '<div style="color:rgba(255,255,255,0.3);font-size:11px;padding:4px 10px;">No clients yet</div>';
+    return;
+  }
+  el.innerHTML = clients.map(c => `
+    <div class="client-item ${c.id === currentClientId ? 'active' : ''}" onclick="selectClient('${c.id}')">
+      <div class="client-avatar">${c.name.charAt(0).toUpperCase()}</div>
+      <span>${c.name}</span>
+    </div>
+  `).join('');
+}
+
+function selectClient(id) {
+  currentClientId = id;
+  fileData = {};
+  fileNames = {};
+  // Reset upload UI
+  ['ga4','gsc-queries','gsc-pages','keywords','competitor','blog'].forEach(clearFile);
+  renderClientList();
+  renderWorkspace();
+  // Switch to data panel
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelector('[data-nav="data"]').classList.add('active');
+  showPanel('data');
+  // Restore analysis if exists
+  const ar = JSON.parse(localStorage.getItem('seo_hub_results_'+id) || 'null');
+  if (ar) {
+    analysisResults[id] = ar;
+    renderResults(ar);
+  }
+  const ca = JSON.parse(localStorage.getItem('seo_hub_actions_'+id) || 'null');
+  if (ca) checkedActions[id] = ca;
+}
+
+function renderWorkspace() {
+  const client = clients.find(c => c.id === currentClientId);
+  if (!client) {
+    document.getElementById('no-client-screen').style.display = 'flex';
+    document.getElementById('client-workspace').style.display = 'none';
+    return;
+  }
+  document.getElementById('no-client-screen').style.display = 'none';
+  document.getElementById('client-workspace').style.display = 'flex';
+  document.getElementById('ws-client-name').textContent = client.name;
+  document.getElementById('ws-client-url').textContent = client.url || '';
+}
+
+function openAddClient() {
+  editingClientId = null;
+  document.getElementById('modal-title').textContent = 'Add New Client';
+  document.getElementById('field-name').value = '';
+  document.getElementById('field-url').value = '';
+  document.getElementById('field-niche').value = '';
+  document.getElementById('field-notes').value = '';
+  document.getElementById('client-modal').classList.add('open');
+}
+
+function openEditClient() {
+  const client = clients.find(c => c.id === currentClientId);
+  if (!client) return;
+  editingClientId = client.id;
+  document.getElementById('modal-title').textContent = 'Edit Client';
+  document.getElementById('field-name').value = client.name;
+  document.getElementById('field-url').value = client.url || '';
+  document.getElementById('field-niche').value = client.niche || '';
+  document.getElementById('field-notes').value = client.notes || '';
+  document.getElementById('client-modal').classList.add('open');
+}
+
+function saveClient() {
+  const name = document.getElementById('field-name').value.trim();
+  if (!name) { document.getElementById('field-name').focus(); return; }
+  if (editingClientId) {
+    const c = clients.find(c => c.id === editingClientId);
+    c.name = name;
+    c.url = document.getElementById('field-url').value.trim();
+    c.niche = document.getElementById('field-niche').value.trim();
+    c.notes = document.getElementById('field-notes').value.trim();
+  } else {
+    clients.push({
+      id: 'c_' + Date.now(),
+      name,
+      url: document.getElementById('field-url').value.trim(),
+      niche: document.getElementById('field-niche').value.trim(),
+      notes: document.getElementById('field-notes').value.trim(),
+      created: new Date().toISOString()
+    });
+  }
+  closeModal();
+  renderClientList();
+  if (!editingClientId) selectClient(clients[clients.length-1].id);
+  else renderWorkspace();
+}
+
+function deleteCurrentClient() {
+  const client = clients.find(c => c.id === currentClientId);
+  if (!client) return;
+  if (!confirm(`Remove "${client.name}"? This will clear all saved analysis for this client.`)) return;
+  delete analysisResults[currentClientId];
+  clients = clients.filter(c => c.id !== currentClientId);
+  saveClients();
+  currentClientId = clients.length ? clients[0].id : null;
+  if (currentClientId) selectClient(currentClientId);
+  else {
+    renderClientList();
+    renderWorkspace();
+  }
+}
+
+function closeModal() {
+  document.getElementById('client-modal').classList.remove('open');
+}
+
+// ============================================================
+// FILE HANDLING
+// ============================================================
+function handleDragOver(e, dropId) {
+  e.preventDefault();
+  document.getElementById(dropId).classList.add('dragover');
+}
+function handleDragLeave(dropId) {
+  document.getElementById(dropId).classList.remove('dragover');
+}
+function handleDrop(e, key) {
+  e.preventDefault();
+  const dropId = 'drop-' + key;
+  document.getElementById(dropId).classList.remove('dragover');
+  Array.from(e.dataTransfer.files).forEach(file => loadFile(file, key));
+}
+function handleFileInput(e, key) {
+  Array.from(e.target.files).forEach(file => loadFile(file, key));
+}
+
+function loadFile(file, key) {
+  const reader = new FileReader();
+  reader.onload = ev => {
+    // Append to existing data for this key (support multiple files)
+    if (fileData[key]) {
+      fileData[key] = fileData[key] + '\n' + ev.target.result;
+    } else {
+      fileData[key] = ev.target.result;
+    }
+    if (!fileNames[key]) fileNames[key] = [];
+    fileNames[key].push(file.name);
+    // Update UI
+    document.getElementById('drop-' + key).style.display = 'none';
+    const loadedEl = document.getElementById('loaded-' + key);
+    loadedEl.style.display = 'flex';
+    const count = fileNames[key].length;
+    document.getElementById('loaded-' + key + '-name').textContent = count === 1 ? file.name + ' (' + Math.round(file.size/1024) + 'KB)' : count + ' files loaded';
+    const statusEl = document.getElementById('status-' + key);
+    statusEl.textContent = count > 1 ? count + ' files' : 'Loaded';
+    statusEl.className = 'upload-card-status status-loaded';
+  };
+  reader.readAsText(file);
+}
+
+function clearFile(key) {
+  delete fileData[key];
+  delete fileNames[key];
+  document.getElementById('drop-' + key).style.display = 'flex';
+  const loadedEl = document.getElementById('loaded-' + key);
+  if (loadedEl) loadedEl.style.display = 'none';
+  const statusEl = document.getElementById('status-' + key);
+  if (statusEl) { statusEl.textContent = 'Empty'; statusEl.className = 'upload-card-status status-empty'; }
+  const fileInput = document.getElementById('file-' + key);
+  if (fileInput) fileInput.value = '';
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function switchNav(el) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+  const nav = el.dataset.nav;
+  showPanel(nav);
+}
+
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+}
+
+// ============================================================
+// PARSE HELPERS
+// ============================================================
+function parseCSV(text) {
+  const lines = text.split('\n').filter(l => l.trim() && !l.startsWith('#'));
+  if (!lines.length) return [];
+  const headers = lines[0].split(',').map(h => h.replace(/"/g,'').trim());
+  return lines.slice(1).map(line => {
+    const vals = line.match(/(".*?"|[^,]+|(?<=,)(?=,))/g) || line.split(',');
+    const obj = {};
+    headers.forEach((h,i) => obj[h] = (vals[i]||'').replace(/"/g,'').trim());
+    return obj;
+  });
+}
+
+function parseGA4(text) {
+  const lines = text.split('\n');
+  const data = { startDate: null, endDate: null, sections: {} };
+  let currentKey = null, headers = null;
+
+  for (const line of lines) {
+    const t = line.trim();
+    if (!t) { currentKey = null; headers = null; continue; }
+    if (t.startsWith('# Start date:') && !data.startDate) { const m = t.match(/(\d{8})/); if (m) data.startDate = m[1]; continue; }
+    if (t.startsWith('# End date:') && !data.endDate) { const m = t.match(/(\d{8})/); if (m) data.endDate = m[1]; continue; }
+    if (t.startsWith('#')) { currentKey = null; headers = null; continue; }
+    if (!headers) {
+      headers = t.split(',').map(h => h.replace(/"/g,'').trim());
+      if (headers[0]==='Nth week' && headers[1]==='Active users') currentKey='weeklyActive';
+      else if (headers[0]==='Nth week' && headers[1]==='New users') currentKey='weeklyNew';
+      else if (headers[0]==='Nth week' && headers.join('').includes('engagement')) currentKey='engagement';
+      else if (headers[0].includes('First user primary') && headers[1]==='New users') currentKey='channelUsers';
+      else if (headers[0].includes('Session primary')) currentKey='channelSessions';
+      else if (headers[0]==='Page title and screen class') currentKey='pages';
+      else if (headers[0]==='Event name' && headers[1]==='Event count') currentKey='events';
+      else if (headers[0]==='Country' && headers.length===2) currentKey='countries';
+      else { headers = null; continue; }
+      if (!data.sections[currentKey]) data.sections[currentKey] = [];
+      continue;
+    }
+    const vals = t.split(',').map(v => v.replace(/"/g,'').trim());
+    const obj = {}; headers.forEach((h,i) => obj[h] = vals[i]||'');
+    data.sections[currentKey].push(obj);
+  }
+  return data;
+}
+
+function fmtDate(d) {
+  if (!d||d.length!==8) return d||'';
+  return `${d.slice(4,6)}/${d.slice(6,8)}/${d.slice(0,4)}`;
+}
+
+// ============================================================
+// ANALYSIS ENGINE
+// ============================================================
+async function runAnalysis() {
+  if (!Object.keys(fileData).length) {
+    alert('Upload at least one CSV file first.');
+    return;
+  }
+  const btn = document.getElementById('analyze-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading-spinner"></span> Analyzing...';
+
+  try {
+    const ga4 = fileData['ga4'] ? parseGA4(fileData['ga4']) : null;
+    const gscQueries = fileData['gsc-queries'] ? parseCSV(fileData['gsc-queries']) : null;
+    const gscPages = fileData['gsc-pages'] ? parseCSV(fileData['gsc-pages']) : null;
+    const keywords = fileData['keywords'] ? parseCSV(fileData['keywords']) : null;
+    const competitor = fileData['competitor'] ? parseCSV(fileData['competitor']) : null;
+    const blog = fileData['blog'] ? parseCSV(fileData['blog']) : null;
+
+    const client = clients.find(c => c.id === currentClientId);
+
+    // Compile metrics for AI
+    const metrics = compileMetrics(ga4, gscQueries, gscPages, keywords);
+
+    // Generate all AI content in parallel
+    const [summary, actions, briefs] = await Promise.all([
+      generateSummary(client, metrics, ga4, gscQueries, gscPages, keywords, competitor, blog),
+      generateActions(client, metrics, ga4, gscQueries, gscPages, keywords, competitor),
+      generateBriefs(client, metrics, gscQueries, keywords, blog)
+    ]);
+
+    const results = { metrics, summary, actions, briefs, generatedAt: new Date().toISOString() };
+    analysisResults[currentClientId] = results;
+    localStorage.setItem('seo_hub_results_'+currentClientId, JSON.stringify(results));
+
+    renderResults(results);
+
+    // Auto-switch to results
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelector('[data-nav="results"]').classList.add('active');
+    showPanel('results');
+
+  } catch(err) {
+    alert('Analysis failed: ' + err.message);
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Run Analysis →';
+  }
+}
+
+function compileMetrics(ga4, gscQueries, gscPages, keywords) {
+  const m = {};
+
+  if (ga4) {
+    const s = ga4.sections;
+    m.startDate = ga4.startDate;
+    m.endDate = ga4.endDate;
+    m.totalActiveUsers = (s.weeklyActive||[]).reduce((a,r)=>a+(parseInt(r['Active users'])||0),0);
+    m.totalNewUsers = (s.weeklyNew||[]).reduce((a,r)=>a+(parseInt(r['New users'])||0),0);
+    const engVals = (s.engagement||[]).map(r=>parseFloat(r['Average engagement time per active user'])||0).filter(v=>v>0);
+    m.avgEngagement = engVals.length ? Math.round(engVals.reduce((a,b)=>a+b,0)/engVals.length) : 0;
+
+    const ch = s.channelUsers||[];
+    const total = ch.reduce((a,r)=>a+(parseInt(r['New users'])||0),0);
+    m.channelTotal = total;
+    m.channels = ch.map(r => ({
+      name: r['First user primary channel group (Default Channel Group)']||Object.values(r)[0],
+      users: parseInt(r['New users'])||0
+    })).sort((a,b)=>b.users-a.users);
+
+    const orgSearch = m.channels.find(c=>c.name==='Organic Search');
+    m.organicSearchUsers = orgSearch ? orgSearch.users : 0;
+    m.organicSearchPct = total ? Math.round(m.organicSearchUsers/total*100) : 0;
+
+    const evts = s.events||[];
+    const contact = evts.find(e=>e['Event name']==='ads_conversion_Contact_Us_1');
+    const lead = evts.find(e=>e['Event name']==='generate_lead');
+    m.contactEvents = contact ? parseInt(contact['Event count']) : 0;
+    m.leadEvents = lead ? parseInt(lead['Event count']) : 0;
+
+    const pages = (s.pages||[]).sort((a,b)=>(parseInt(b['Views'])||0)-(parseInt(a['Views'])||0));
+    m.topPages = pages.slice(0,10);
+    m.totalPageViews = pages.reduce((a,r)=>a+(parseInt(r['Views'])||0),0);
+  }
+
+  if (gscQueries && gscQueries.length) {
+    // Detect column names flexibly
+    const sample = gscQueries[0];
+    const keys = Object.keys(sample);
+    const queryKey = keys.find(k => k.toLowerCase().includes('query') || k.toLowerCase().includes('top queries')) || keys[0];
+    const clickKey = keys.find(k => k.toLowerCase().includes('click')) || keys[1];
+    const impKey = keys.find(k => k.toLowerCase().includes('impression')) || keys[2];
+    const ctrKey = keys.find(k => k.toLowerCase() === 'ctr') || keys[3];
+    const posKey = keys.find(k => k.toLowerCase().includes('position')) || keys[4];
+
+    const qs = gscQueries.map(r => ({
+      query: r[queryKey]||'',
+      clicks: parseInt(r[clickKey])||0,
+      impressions: parseInt(r[impKey])||0,
+      ctr: parseFloat((r[ctrKey]||'0').replace('%',''))||0,
+      position: parseFloat(r[posKey])||0
+    })).filter(q=>q.query).sort((a,b)=>b.impressions-a.impressions);
+
+    m.totalImpressions = qs.reduce((a,q)=>a+q.impressions,0);
+    m.totalClicks = qs.reduce((a,q)=>a+q.clicks,0);
+    m.avgCTR = m.totalImpressions ? (m.totalClicks/m.totalImpressions*100).toFixed(1) : '0';
+    m.topQueries = qs.slice(0,15);
+
+    // High impression / low CTR = opportunity
+    m.ctrOpportunities = qs.filter(q=>q.impressions>50&&q.ctr<3&&q.position<=20).slice(0,8);
+
+    // Page 1 terms (position 1-10)
+    m.page1Queries = qs.filter(q=>q.position>=1&&q.position<=10).slice(0,10);
+
+    // Near page 1 (position 11-20)
+    m.nearPage1 = qs.filter(q=>q.position>10&&q.position<=20).sort((a,b)=>b.impressions-a.impressions).slice(0,8);
+  }
+
+  if (gscPages && gscPages.length) {
+    const sample = gscPages[0];
+    const keys = Object.keys(sample);
+    const pageKey = keys.find(k=>k.toLowerCase().includes('page')||k.toLowerCase().includes('url'))||keys[0];
+    const clickKey = keys.find(k=>k.toLowerCase().includes('click'))||keys[1];
+    const impKey = keys.find(k=>k.toLowerCase().includes('impression'))||keys[2];
+    const ctrKey = keys.find(k=>k.toLowerCase()==='ctr')||keys[3];
+    const posKey = keys.find(k=>k.toLowerCase().includes('position'))||keys[4];
+
+    const ps = gscPages.map(r=>({
+      page: r[pageKey]||'',
+      clicks: parseInt(r[clickKey])||0,
+      impressions: parseInt(r[impKey])||0,
+      ctr: parseFloat((r[ctrKey]||'0').replace('%',''))||0,
+      position: parseFloat(r[posKey])||0
+    })).filter(p=>p.page);
+
+    m.topGSCPages = ps.sort((a,b)=>b.impressions-a.impressions).slice(0,10);
+    m.pageCTROpportunities = ps.filter(p=>p.impressions>30&&p.ctr<2).sort((a,b)=>b.impressions-a.impressions).slice(0,6);
+  }
+
+  return m;
+}
+
+// ============================================================
+// AI CALLS
+// ============================================================
+async function callClaude(prompt) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error.message);
+  return data.content?.find(b=>b.type==='text')?.text || '';
+}
+
+async function generateSummary(client, metrics, ga4, gscQueries, gscPages, keywords, competitor, blog) {
+  const clientContext = `CLIENT: ${client.name} | URL: ${client.url||'TBD'} | NICHE: ${client.niche||''}
+FULL CLIENT BRIEF NOTES:
+${client.notes||'No notes provided.'}`;
+
+  const prompt = `You are an SEO and digital marketing analyst working for Amy, a digital marketing consultant. She manages this client: 
+
+${clientContext}
+
+Here are the key metrics from their uploaded data this period:
+${JSON.stringify(metrics, null, 2)}
+
+Write a plain-English analytics summary for Amy (the person managing this client's SEO -- not the client). Be direct, specific, and practical. Reference the client's specific goals and known issues from the brief above. Call out the 2-3 things that matter most this month. Flag what needs immediate action and what's actually working. Under 200 words. No bullet points. No headers. Write like a sharp colleague reviewing the numbers.`;
+
+  return callClaude(prompt);
+}
+
+async function generateActions(client, metrics, ga4, gscQueries, gscPages, keywords, competitor) {
+  const clientContext = `CLIENT: ${client.name} | URL: ${client.url||'TBD'} | NICHE: ${client.niche||''}
+FULL CLIENT BRIEF NOTES:
+${client.notes||'No notes provided.'}`;
+
+  const prompt = `You are an SEO strategist working for Amy, a digital marketing consultant. Her client:
+
+${clientContext}
+
+Data from this period:
+- Organic search %: ${metrics.organicSearchPct||'unknown'}%
+- Avg CTR: ${metrics.avgCTR||'unknown'}%
+- Total impressions: ${metrics.totalImpressions||'unknown'}
+- CTR opportunities (high impression, low CTR queries): ${JSON.stringify(metrics.ctrOpportunities?.slice(0,5)||[])}
+- Near page 1 queries (positions 11-20): ${JSON.stringify(metrics.nearPage1?.slice(0,5)||[])}
+- Page CTR opportunities: ${JSON.stringify(metrics.pageCTROpportunities?.slice(0,4)||[])}
+- Top pages by views: ${JSON.stringify(metrics.topPages?.slice(0,5)||[])}
+
+Generate a monthly SEO + copy action checklist. Use the client brief above to make tasks specific -- reference known issues, platform constraints, active projects, and brand rules where relevant. Return ONLY valid JSON array, no markdown, no explanation. Each item:
+{
+  "priority": "high"|"medium"|"low",
+  "category": "SEO"|"Copy"|"Content"|"Technical"|"Links"|"Social"|"Paid",
+  "task": "Short task title",
+  "detail": "Specific, actionable instruction referencing actual data and client context where possible. 1-2 sentences."
+}
+
+Generate 12-16 items. Mix of quick wins and longer plays. Make every item specific -- no generic advice.`;
+
+  const raw = await callClaude(prompt);
+  try {
+    return JSON.parse(raw.replace(/```json|```/g,'').trim());
+  } catch {
+    return [{priority:'high',category:'SEO',task:'Review your data',detail:'Could not parse action items. Try re-running the analysis.'}];
+  }
+}
+
+async function generateBriefs(client, metrics, gscQueries, keywords, blog) {
+  const clientContext = `CLIENT: ${client.name} | URL: ${client.url||'TBD'} | NICHE: ${client.niche||''}
+FULL CLIENT BRIEF NOTES:
+${client.notes||'No notes provided.'}`;
+
+  const prompt = `You are a content strategist and SEO expert working for Amy, a digital marketing consultant. Her client:
+
+${clientContext}
+
+Search data available:
+- Top queries by impressions: ${JSON.stringify(metrics.topQueries?.slice(0,12)||[])}
+- CTR opportunities (high impressions, low clicks): ${JSON.stringify(metrics.ctrOpportunities?.slice(0,6)||[])}
+- Near page 1 queries (positions 11-20): ${JSON.stringify(metrics.nearPage1?.slice(0,6)||[])}
+
+Generate 3 blog post briefs that will drive the most organic search traffic for this specific client. Use the client brief to inform the angle, voice, and CTA -- content must match the brand. Base topics on the actual search data where available. If search data is sparse, use the client's known keywords and content pillars from the brief.
+
+Return ONLY valid JSON array, no markdown. Each brief:
+{
+  "title": "SEO-optimized post title that matches this brand's voice",
+  "targetKeyword": "primary keyword",
+  "secondaryKeywords": ["kw1","kw2","kw3"],
+  "searchIntent": "informational|navigational|transactional",
+  "estimatedOpportunity": "Why this will drive traffic for this client specifically -- 1 sentence",
+  "angle": "The unique angle or hook -- must match client brand voice -- 1-2 sentences",
+  "outline": ["H2 section 1", "H2 section 2", "H2 section 3", "H2 section 4", "H2 section 5"],
+  "wordCount": "1200-1800",
+  "cta": "Specific CTA aligned to this client's conversion goal"
+}`;
+
+  const raw = await callClaude(prompt);
+  try {
+    return JSON.parse(raw.replace(/```json|```/g,'').trim());
+  } catch {
+    return null;
+  }
+}
+
+// ============================================================
+// RENDER RESULTS
+// ============================================================
+function renderResults(results) {
+  const { metrics, summary, actions, briefs } = results;
+  const client = clients.find(c => c.id === currentClientId);
+
+  // ---- RESULTS PANEL ----
+  const rEl = document.getElementById('results-content');
+  let html = `
+    <div class="results-header">
+      <div>
+        <h2>${client?.name || 'Client'} -- Monthly Report</h2>
+      </div>
+      <div class="period-tag">${fmtDate(metrics.startDate)} -- ${fmtDate(metrics.endDate)} &nbsp;|&nbsp; Generated ${new Date(results.generatedAt).toLocaleDateString()}</div>
+    </div>
+  `;
+
+  // Stats row
+  if (metrics.totalActiveUsers !== undefined) {
+    html += `<div class="stats-row">
+      ${statTile('Active Users', metrics.totalActiveUsers, metrics.totalNewUsers+' new', metrics.totalActiveUsers>200?'good':'warn')}
+      ${statTile('Organic Search', (metrics.organicSearchPct||0)+'%', metrics.organicSearchUsers+' users', (metrics.organicSearchPct||0)>=30?'good':(metrics.organicSearchPct||0)>=15?'warn':'bad')}
+      ${statTile('Avg Engagement', (metrics.avgEngagement||0)+'s', 'per session', (metrics.avgEngagement||0)>=30?'good':'warn')}
+      ${metrics.totalImpressions!==undefined ? statTile('GSC Impressions', fmtNum(metrics.totalImpressions), metrics.totalClicks+' clicks', 'good') : ''}
+      ${metrics.avgCTR!==undefined ? statTile('Avg CTR', metrics.avgCTR+'%', 'click-through rate', parseFloat(metrics.avgCTR)>=3?'good':parseFloat(metrics.avgCTR)>=1.5?'warn':'bad') : ''}
+      ${statTile('Conversions', (metrics.contactEvents||0)+(metrics.leadEvents||0), (metrics.contactEvents||0)+' contact, '+(metrics.leadEvents||0)+' lead', (metrics.contactEvents||0)>5?'good':'warn')}
+    </div>`;
+  }
+
+  // Two-col: channels + pages
+  const hasChannels = metrics.channels?.length;
+  const hasPages = metrics.topPages?.length || metrics.topGSCPages?.length;
+
+  if (hasChannels || hasPages) {
+    html += '<div class="two-col">';
+    if (hasChannels) {
+      const maxU = Math.max(...metrics.channels.map(c=>c.users));
+      html += `<div class="card">
+        <div class="card-header"><h3>Traffic Sources (New Users)</h3></div>
+        <div class="card-body">
+          ${metrics.channels.map(c=>`
+            <div class="bar-row">
+              <div class="bar-label">${c.name}</div>
+              <div class="bar-track"><div class="bar-fill bar-fill-accent" style="width:${maxU?Math.round(c.users/maxU*100):0}%"></div></div>
+              <div class="bar-num">${c.users}</div>
+            </div>`).join('')}
+        </div>
+      </div>`;
+    }
+    if (metrics.topPages?.length) {
+      html += `<div class="card">
+        <div class="card-header"><h3>Top Pages (GA4 Views)</h3></div>
+        <div class="card-body">
+          <table class="kw-table">
+            <thead><tr><th>Page</th><th>Views</th></tr></thead>
+            <tbody>${metrics.topPages.map(p=>`<tr>
+              <td><span class="kw-query">${p['Page title and screen class']||''}</span></td>
+              <td>${p['Views']||0}</td>
+            </tr>`).join('')}</tbody>
+          </table>
+        </div>
+      </div>`;
+    }
+    html += '</div>';
+  }
+
+  // GSC queries
+  if (metrics.topQueries?.length) {
+    html += `<div class="two-col">
+      <div class="card">
+        <div class="card-header"><h3>Top Search Queries (by Impressions)</h3></div>
+        <div class="card-body">
+          <table class="kw-table">
+            <thead><tr><th>Query</th><th>Impr.</th><th>Clicks</th><th>CTR</th><th>Pos.</th></tr></thead>
+            <tbody>${metrics.topQueries.map(q=>`<tr>
+              <td><span class="kw-query">${q.query}</span></td>
+              <td>${fmtNum(q.impressions)}</td>
+              <td>${q.clicks}</td>
+              <td>${q.ctr}%</td>
+              <td>${q.position.toFixed(1)}</td>
+            </tr>`).join('')}</tbody>
+          </table>
+        </div>
+      </div>
+      ${metrics.ctrOpportunities?.length ? `
+      <div class="card">
+        <div class="card-header"><h3>🎯 CTR Opportunities</h3><span style="font-size:10px;color:var(--muted)">High impressions, low clicks</span></div>
+        <div class="card-body">
+          <table class="kw-table">
+            <thead><tr><th>Query</th><th>Impr.</th><th>CTR</th><th>Pos.</th></tr></thead>
+            <tbody>${metrics.ctrOpportunities.map(q=>`<tr>
+              <td><span class="kw-query">${q.query}</span></td>
+              <td>${fmtNum(q.impressions)}</td>
+              <td style="color:var(--red)">${q.ctr}%</td>
+              <td>${q.position.toFixed(1)}</td>
+            </tr>`).join('')}</tbody>
+          </table>
+        </div>
+      </div>` : ''}
+    </div>`;
+  }
+
+  if (metrics.nearPage1?.length) {
+    html += `<div class="card" style="margin-bottom:24px">
+      <div class="card-header"><h3>🚀 Near Page 1 -- Quick Win Targets (Positions 11-20)</h3></div>
+      <div class="card-body">
+        <table class="kw-table">
+          <thead><tr><th>Query</th><th>Impressions</th><th>Clicks</th><th>Position</th></tr></thead>
+          <tbody>${metrics.nearPage1.map(q=>`<tr>
+            <td><span class="kw-query">${q.query}</span></td>
+            <td>${fmtNum(q.impressions)}</td>
+            <td>${q.clicks}</td>
+            <td style="color:var(--yellow);font-weight:600">${q.position.toFixed(1)}</td>
+          </tr>`).join('')}</tbody>
+        </table>
+      </div>
+    </div>`;
+  }
+
+  // AI Summary
+  html += `<div class="card">
+    <div class="card-header"><h3>📝 Plain-English Summary</h3></div>
+    <div class="card-body">
+      <p style="font-size:13px;line-height:1.8;color:var(--text2)">${summary || 'No summary available.'}</p>
+    </div>
+  </div>`;
+
+  rEl.innerHTML = html;
+
+  // ---- ACTIONS PANEL ----
+  const savedChecked = JSON.parse(localStorage.getItem('seo_hub_actions_'+currentClientId) || '{}');
+  renderActions(actions, savedChecked);
+
+  // ---- BRIEFS PANEL ----
+  renderBriefs(briefs);
+}
+
+function renderActions(actions, savedChecked) {
+  const aEl = document.getElementById('actions-content');
+  if (!actions?.length) { aEl.innerHTML = '<div class="empty-state"><div class="es-icon">✅</div><h3>No actions</h3><p>Run analysis to generate actions.</p></div>'; return; }
+
+  const categories = [...new Set(actions.map(a=>a.category))];
+  let html = `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--border)">
+    <h2 style="font-family:'Instrument Serif',serif;font-size:24px;font-weight:400">Monthly Action List</h2>
+    <button class="btn btn-secondary" onclick="clearAllChecks()">Reset Checkboxes</button>
+  </div>`;
+
+  const priorities = ['high','medium','low'];
+  const priorityLabels = {high:'🔴 High Priority',medium:'🟡 Medium Priority',low:'🟢 Lower Priority'};
+
+  priorities.forEach(p => {
+    const items = actions.filter(a=>a.priority===p);
+    if (!items.length) return;
+    html += `<div style="margin-bottom:28px">
+      <div class="sidebar-section-label" style="color:var(--text2);font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">${priorityLabels[p]}</div>
+      <div class="action-list">`;
+    items.forEach((item, i) => {
+      const id = `action_${p}_${i}`;
+      const done = savedChecked[id] || false;
+      html += `<div class="action-item ${done?'done':''}" id="${id}" onclick="toggleAction('${id}')">
+        <div class="action-checkbox">${done?'✓':''}</div>
+        <div class="action-priority p-${item.priority}">${item.category}</div>
+        <div class="action-content">
+          <div class="action-text">${item.task}</div>
+          <div class="action-detail">${item.detail}</div>
+        </div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+
+  aEl.innerHTML = html;
+}
+
+function toggleAction(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle('done');
+  const checkbox = el.querySelector('.action-checkbox');
+  const isDone = el.classList.contains('done');
+  checkbox.textContent = isDone ? '✓' : '';
+  // Save
+  const saved = JSON.parse(localStorage.getItem('seo_hub_actions_'+currentClientId)||'{}');
+  saved[id] = isDone;
+  localStorage.setItem('seo_hub_actions_'+currentClientId, JSON.stringify(saved));
+}
+
+function clearAllChecks() {
+  localStorage.removeItem('seo_hub_actions_'+currentClientId);
+  const results = analysisResults[currentClientId];
+  if (results) renderActions(results.actions, {});
+}
+
+function renderBriefs(briefs) {
+  const bEl = document.getElementById('briefs-content');
+  if (!briefs?.length) {
+    bEl.innerHTML = '<div class="empty-state"><div class="es-icon">✍️</div><h3>No briefs generated</h3><p>Upload GSC queries or keyword data to generate data-driven blog briefs.</p></div>';
+    return;
+  }
+
+  const intentColors = { informational: 'var(--accent3)', navigational: 'var(--yellow)', transactional: 'var(--green)' };
+  const intentBg = { informational: '#e8f0fe', navigational: 'var(--yellow-bg)', transactional: 'var(--green-bg)' };
+
+  let html = `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--border)">
+    <h2 style="font-family:'Instrument Serif',serif;font-size:24px;font-weight:400">Blog Post Briefs</h2>
+    <span style="font-size:11px;color:var(--muted)">Based on your actual search data</span>
+  </div>`;
+
+  briefs.forEach((brief, i) => {
+    html += `<div class="brief-card">
+      <div class="brief-header">
+        <h3>${brief.title}</h3>
+        <div class="brief-badge">Brief ${i+1} of ${briefs.length}</div>
+      </div>
+      <div class="brief-body">
+        <div class="brief-meta">
+          <span class="brief-tag">🎯 ${brief.targetKeyword}</span>
+          <span class="brief-tag" style="background:${intentBg[brief.searchIntent]||'var(--bg2)'};color:${intentColors[brief.searchIntent]||'var(--text2)'}">
+            ${brief.searchIntent}
+          </span>
+          <span class="brief-tag">📏 ${brief.wordCount} words</span>
+          ${(brief.secondaryKeywords||[]).map(k=>`<span class="brief-tag">${k}</span>`).join('')}
+        </div>
+
+        <div class="brief-section">
+          <div class="brief-section-label">Why this will work</div>
+          <p>${brief.estimatedOpportunity}</p>
+        </div>
+
+        <div class="brief-section">
+          <div class="brief-section-label">Angle / Hook</div>
+          <p>${brief.angle}</p>
+        </div>
+
+        <div class="brief-section">
+          <div class="brief-section-label">Outline</div>
+          <ul>${(brief.outline||[]).map(s=>`<li>${s}</li>`).join('')}</ul>
+        </div>
+
+        <div class="brief-section">
+          <div class="brief-section-label">CTA</div>
+          <p>${brief.cta}</p>
+        </div>
+
+        <div style="padding-top:12px;border-top:1px solid var(--border);margin-top:4px;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:11px;color:var(--muted)">Ready to write? Generate a full first draft in this client's voice.</span>
+          <button class="analyze-btn" onclick="generateBlogDraft(${i})" style="padding:8px 20px;font-size:11px;background:var(--accent)">✍️ Generate First Draft</button>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  bEl.innerHTML = html;
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function statTile(label, val, sub, signal) {
+  if (val === undefined || val === null) return '';
+  const pills = { good: 'pill-good', warn: 'pill-warn', bad: 'pill-bad' };
+  const labels = { good: 'Good', warn: 'Watch', bad: 'Needs Work' };
+  return `<div class="stat-tile">
+    <div class="st-label">${label}</div>
+    <div class="st-val">${val}</div>
+    <div class="st-sub">${sub}</div>
+    <span class="signal-pill ${pills[signal]||'pill-warn'}">${labels[signal]||'--'}</span>
+  </div>`;
+}
+
+function fmtNum(n) {
+  if (!n) return '0';
+  return n >= 1000 ? (n/1000).toFixed(1)+'k' : String(n);
+}
+
+
+// ============================================================
+// GENERATE BLOG DRAFT
+// ============================================================
+let currentDraftText = '';
+
+async function generateBlogDraft(briefIndex) {
+  const results = analysisResults[currentClientId];
+  const client = clients.find(c => c.id === currentClientId);
+  if (!results || !results.briefs || !client) return;
+  const brief = results.briefs[briefIndex];
+  if (!brief) return;
+
+  document.getElementById("draft-modal-title").textContent = brief.title;
+  document.getElementById("draft-output").innerHTML = "<div style=\"display:flex;align-items:center;gap:10px;padding:20px 0;color:var(--muted)\"><div class=\"ai-loading-dot\"></div><div class=\"ai-loading-dot\"></div><div class=\"ai-loading-dot\"></div><span style=\"font-size:12px\">Writing first draft in client voice...</span></div>";
+  document.getElementById("draft-copy-btn").style.display = "none";
+  document.getElementById("draft-word-count").textContent = "";
+  document.getElementById("draft-modal").classList.add("open");
+
+  const clientContext = "CLIENT: " + client.name + " | URL: " + (client.url||"TBD") + " | NICHE: " + (client.niche||"") + "\nFULL CLIENT BRIEF:\n" + (client.notes||"No notes.");
+
+  const prompt = clientContext + "\n\nWrite a full blog post draft for this brief:\nTitle: " + brief.title + "\nTarget keyword: " + brief.targetKeyword + "\nAngle: " + brief.angle + "\nOutline:\n" + (brief.outline||[]).join("\n") + "\nCTA: " + brief.cta + "\nWord count: " + brief.wordCount + "\n\nWrite in this client's exact brand voice. Short paragraphs. H2 subheadings with ##. Include target keyword naturally. End with the specified CTA. Do NOT include meta description or SEO notes.";
+
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 3000, messages: [{ role: "user", content: prompt }] })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    currentDraftText = data.content?.find(b => b.type === "text")?.text || "";
+    const wordCount = currentDraftText.split(/\s+/).filter(Boolean).length;
+    const formatted = currentDraftText
+      .replace(/^## (.+)$/gm, "<h2 style=\"font-size:18px;font-weight:500;margin:20px 0 8px\">$1</h2>")
+      .replace(/^# (.+)$/gm, "<h1 style=\"font-size:22px;font-weight:500;margin-bottom:14px\">$1</h1>")
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\n\n/g, "</p><p style=\"font-size:13px;line-height:1.8;margin-bottom:12px\">")
+      .replace(/\n/g, "<br>");
+    document.getElementById("draft-output").innerHTML = "<div style=\"font-size:13px;line-height:1.8\"><p style=\"font-size:13px;line-height:1.8;margin-bottom:12px\">" + formatted + "</p></div>";
+    document.getElementById("draft-word-count").textContent = "~" + wordCount + " words";
+    document.getElementById("draft-copy-btn").style.display = "inline-flex";
+  } catch(err) {
+    document.getElementById("draft-output").innerHTML = "<p style=\"color:var(--red);font-size:12px\">Error: " + err.message + "</p>";
+  }
+}
+
+
+// ============================================================
+// META DESCRIPTION REWRITER
+// ============================================================
+async function generateMetaRewrites() {
+  const client = clients.find(c => c.id === currentClientId);
+  if (!client) { alert('Select a client first.'); return; }
+
+  const pagesRaw = document.getElementById('meta-pages-input').value.trim();
+  if (!pagesRaw) { alert('Enter at least one page name.'); return; }
+
+  const pages = pagesRaw.split('\n').map(l => l.trim()).filter(Boolean);
+  const keywords = document.getElementById('meta-keywords-input').value.trim()
+    .split('\n').map(l => l.trim()).filter(Boolean);
+
+  const btn = document.getElementById('meta-generate-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading-spinner"></span> Generating...';
+
+  const outputEl = document.getElementById('meta-output');
+  outputEl.innerHTML = `<div style="display:flex;align-items:center;gap:10px;padding:20px 0;color:var(--muted)">
+    <div class="ai-loading-dot"></div><div class="ai-loading-dot"></div><div class="ai-loading-dot"></div>
+    <span style="font-size:12px">Writing title tags and meta descriptions in client voice...</span>
+  </div>`;
+
+  const clientContext = `CLIENT: ${client.name} | URL: ${client.url||'TBD'} | NICHE: ${client.niche||''}
+FULL CLIENT BRIEF NOTES:
+${client.notes||'No notes provided.'}`;
+
+  const pageList = pages.map((p, i) => `${i+1}. ${p}${keywords[i] ? ` (focus keyword: ${keywords[i]})` : ''}`).join('\n');
+
+  const prompt = `You are an SEO specialist writing title tags and meta descriptions for Amy, a digital marketing consultant.
+
+${clientContext}
+
+Write title tags and meta descriptions for these pages:
+${pageList}
+
+STRICT REQUIREMENTS:
+- Title tags: 55-60 characters MAX (hard limit -- count carefully)
+- Meta descriptions: 140-155 characters MAX (hard limit -- count carefully)
+- Write in this client's exact brand voice as described in the brief
+- Follow all voice rules: use approved phrases, avoid banned words/phrases
+- Title tags: include focus keyword near the front, include brand name at end separated by |
+- Meta descriptions: lead with a benefit or transformation, include a soft CTA, no generic filler
+- Never use the word "actually" for Fresh Look or Shotgun clients
+- No hashtags for Shotgun or Fresh Look
+- No "board certified" for Inclusive Aesthetics -- DNP only
+- No miracle/guarantee language for medical/aesthetics clients
+
+Return ONLY valid JSON array, no markdown. Each item:
+{
+  "page": "page name",
+  "focusKeyword": "keyword used",
+  "titleTag": "title tag text",
+  "titleCharCount": 57,
+  "metaDescription": "meta description text",
+  "metaCharCount": 148
+}`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    const raw = data.content?.find(b => b.type === 'text')?.text || '[]';
+    let items;
+    try { items = JSON.parse(raw.replace(/```json|```/g,'').trim()); }
+    catch { throw new Error('Could not parse response -- try again'); }
+
+    let html = `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+      <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">${items.length} pages rewritten</span>
+      <button class="copy-btn" onclick="copyAllMeta()">Copy All as Text</button>
+    </div>`;
+
+    items.forEach(item => {
+      const titleOver = item.titleCharCount > 60;
+      const metaOver = item.metaCharCount > 155;
+      html += `<div class="meta-row">
+        <div class="meta-row-page">${item.page}${item.focusKeyword ? ` -- <span style="color:var(--accent3)">${item.focusKeyword}</span>` : ''}</div>
+        <div class="meta-field">
+          <div class="meta-field-label">Title Tag</div>
+          <div class="meta-field-value" id="title-${item.page.replace(/\s/g,'_')}">${item.titleTag}</div>
+          <div class="meta-field-count ${titleOver ? 'over' : ''}">${item.titleCharCount} chars ${titleOver ? '⚠ over 60' : '✓'}</div>
+        </div>
+        <div class="meta-field">
+          <div class="meta-field-label">Meta Description</div>
+          <div class="meta-field-value" id="meta-${item.page.replace(/\s/g,'_')}">${item.metaDescription}</div>
+          <div class="meta-field-count ${metaOver ? 'over' : ''}">${item.metaCharCount} chars ${metaOver ? '⚠ over 155' : '✓'}</div>
+        </div>
+        <div class="meta-copy-row">
+          <button class="copy-btn" onclick="copyMetaRow(this, '${item.titleTag.replace(/'/g,"\\'")}','${item.metaDescription.replace(/'/g,"\\'")}')">Copy This Row</button>
+        </div>
+      </div>`;
+    });
+
+    // Store for copy-all
+    window._metaItems = items;
+    outputEl.innerHTML = html;
+  } catch(err) {
+    outputEl.innerHTML = `<p style="color:var(--red);font-size:12px">Error: ${err.message}</p>`;
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Generate Meta Rewrites →';
+  }
+}
+
+function copyMetaRow(btn, title, meta) {
+  const text = `TITLE TAG:\n${title}\n\nMETA DESCRIPTION:\n${meta}`;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy This Row', 2000);
+  });
+}
+
+function copyAllMeta() {
+  if (!window._metaItems) return;
+  const text = window._metaItems.map(i =>
+    `${i.page.toUpperCase()}\nTitle Tag: ${i.titleTag}\nMeta Description: ${i.metaDescription}`
+  ).join('\n\n---\n\n');
+  navigator.clipboard.writeText(text).then(() => alert('All meta data copied to clipboard.'));
+}
+
+// ============================================================
+// SOCIAL CAPTION GENERATOR
+// ============================================================
+let selectedPlatform = 'instagram-reel';
+let captionHistory = [];
+
+function selectPlatform(btn) {
+  document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedPlatform = btn.dataset.platform;
+}
+
+async function generateCaption() {
+  const client = clients.find(c => c.id === currentClientId);
+  if (!client) { alert('Select a client first.'); return; }
+
+  const input = document.getElementById('caption-input').value.trim();
+  if (!input) { alert('Describe the post or paste the script first.'); return; }
+
+  const contentType = document.getElementById('caption-content-type').value;
+  const angle = document.getElementById('caption-angle').value.trim();
+
+  const btn = document.getElementById('caption-generate-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading-spinner"></span> Generating...';
+
+  const outputEl = document.getElementById('caption-output');
+  outputEl.innerHTML = `<div style="display:flex;align-items:center;gap:10px;padding:30px 20px;color:var(--muted)">
+    <div class="ai-loading-dot"></div><div class="ai-loading-dot"></div><div class="ai-loading-dot"></div>
+    <span style="font-size:12px">Writing captions in client voice...</span>
+  </div>`;
+
+  const platformLabels = {
+    'instagram-reel': 'Instagram Reel',
+    'instagram-carousel': 'Instagram Carousel',
+    'facebook': 'Facebook',
+    'linkedin': 'LinkedIn'
+  };
+
+  const platformGuidance = {
+    'instagram-reel': 'Instagram Reel caption: 1-3 short paragraphs. Hook on line 1. No hashtags unless client rules allow. The caption must NOT restate the script -- new angle, new thought, expansion of the idea.',
+    'instagram-carousel': 'Instagram Carousel caption: slightly longer, can tease multiple slides. Conversational. First line stops the scroll.',
+    'facebook': 'Facebook post: slightly more conversational than Instagram. Can be a bit longer. No hashtags.',
+    'linkedin': 'LinkedIn post: professional but not stiff. First line is the hook -- must stop the scroll. Can use white space and short paragraphs. Relevant CTA at end.'
+  };
+
+  const clientContext = `CLIENT: ${client.name} | URL: ${client.url||'TBD'} | NICHE: ${client.niche||''}
+FULL CLIENT BRIEF NOTES (VOICE RULES AND RESTRICTIONS):
+${client.notes||'No notes provided.'}`;
+
+  const prompt = `You are a social media copywriter working for Amy, a digital marketing consultant. Write captions for her client.
+
+${clientContext}
+
+PLATFORM: ${platformLabels[selectedPlatform]}
+${platformGuidance[selectedPlatform]}
+
+CONTENT TYPE: ${contentType}
+
+POST INPUT:
+${input}
+
+${angle ? `SPECIFIC ANGLE/ASK: ${angle}` : ''}
+
+CRITICAL RULES:
+- Follow ALL voice rules and word restrictions from the client brief above exactly
+- If the brief says no hashtags -- zero hashtags, no exceptions
+- If the brief says captions must NOT restate the script -- write a completely different angle
+- If the brief says no dollar signs in captions -- do not include prices
+- If the brief says no "actually" -- never use it
+- Match the exact tone described for this client -- dry/deadpan for Shotgun, warm/educational for J Esthetics, strategy-forward for Fresh Look, direct/earned for La Tribu, clinical-warm for Inclusive Aesthetics
+- For couple/wedding posts: narrative and flowing, not hook-driven
+- For real estate listings: specific details, never fabricate data
+
+Write TWO caption variations. Return ONLY valid JSON, no markdown:
+[
+  {
+    "variant": "A",
+    "angle": "One-word description of this variant's angle",
+    "caption": "Full caption text exactly as it would be posted"
+  },
+  {
+    "variant": "B",
+    "angle": "One-word description of this variant's angle",
+    "caption": "Full caption text exactly as it would be posted"
+  }
+]`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1500,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    const raw = data.content?.find(b => b.type === 'text')?.text || '[]';
+    let variants;
+    try { variants = JSON.parse(raw.replace(/```json|```/g,'').trim()); }
+    catch { throw new Error('Could not parse response -- try again'); }
+
+    const variantColors = { A: 'var(--accent)', B: 'var(--accent2)' };
+
+    let html = variants.map(v => `
+      <div class="caption-variant">
+        <div class="caption-variant-header">
+          <span style="color:${variantColors[v.variant]||'var(--muted)'}">Variant ${v.variant} -- ${v.angle}</span>
+          <button class="copy-btn" onclick="copyCaption(this, \`${v.caption.replace(/`/g,'\\`').replace(/\\$/g,'\\$')}\`)">Copy</button>
+        </div>
+        <div class="caption-text">${v.caption.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+      </div>
+    `).join('');
+
+    outputEl.innerHTML = html;
+
+    // Add to session history
+    captionHistory.unshift({ platform: platformLabels[selectedPlatform], variants, input: input.slice(0,80)+'...' });
+    if (captionHistory.length > 10) captionHistory.pop();
+    renderCaptionHistory();
+
+  } catch(err) {
+    outputEl.innerHTML = `<p style="color:var(--red);font-size:12px;padding:20px">Error: ${err.message}</p>`;
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Generate Captions →';
+  }
+}
+
+function copyCaption(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+}
+
+function renderCaptionHistory() {
+  if (!captionHistory.length) return;
+  const section = document.getElementById('caption-history-section');
+  const histEl = document.getElementById('caption-history');
+  section.style.display = 'block';
+  histEl.innerHTML = captionHistory.map((h, i) => `
+    <div class="caption-history-item">
+      <div class="caption-history-meta">${h.platform} -- ${h.input}</div>
+      ${h.variants.map(v => `<div style="margin-bottom:10px"><strong style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Variant ${v.variant}</strong><br>${v.caption.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`).join('')}
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+renderClientList();
+if (currentClientId && clients.find(c=>c.id===currentClientId)) {
+  selectClient(currentClientId);
+} else if (clients.length) {
+  selectClient(clients[0].id);
+} else {
+  renderWorkspace();
+}
+</script>
+</body>
+</html>
